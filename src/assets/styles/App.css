@@ -1,4 +1,8 @@
 
+.onClickLink{
+    cursor: pointer;
+    color: red;
+}
 
 .title{
     color:lightcoral;

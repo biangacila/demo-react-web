@@ -1,73 +1,81 @@
 import React from "react";
 import './assets/styles/App.css'
 import {PostToHPro} from "./api/post";
+import EntryForm from "./components/Personnel/EntryForm";
+import EntryList from "./components/Personnel/EntryList";
+import Title from "./components/common/Title";
+import PersonnelPage from "./pages/PersonnelPage";
+import TopMenu from "./components/common/TopMenu";
 
-export default class App extends React.Component{
+export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state= {
+        this.state = {
             Personnel: [],
             Countries: [],
-            User: ""
+            User: "",
+            page:"personnel"
         }
     }
+
     componentDidMount = async () => {
         await this.listData()
     }
-    listData=async ()=>{
+    listData = async () => {
         let data = {};
         let endpoint = "/common/entity/Personnel/list";
-       await PostToHPro(data,endpoint,(dataOut)=>{
+        await PostToHPro(data, endpoint, (dataOut) => {
             console.log("--->>>", dataOut)
-           this.setState({
-               Personnel:dataOut.RESULT,
-           })
+            this.setState({
+                Personnel: dataOut.RESULT,
+            })
+        })
+    }
+    onDelete=async (record)=>{
+        let data = {
+            Params:[
+                {key:"org",val:record.org,type:"string"},
+                {key:"code",val:record.code,type:"string"},
+            ]
+        };
+        let endpoint = "/common/entity/Personnel/delete";
+        await PostToHPro(data, endpoint, async (dataOut) => {
+            console.log("--->>>", dataOut)
+            await this.listData()
+            alert("thank u, record deleted!")
         })
     }
 
-   /* let name="Bruno"
-     function getCountry(){
-        return "CONGO"
-     }
-     function clc(num1,num2){
-        return num1+num2
-     }
-    listData();*/
+    setMenu=(menu)=>{
+        this.setState({page:menu})
+    }
 
-    render(){
-        return(
-            <div>
-                <h1 className={"title"}>Main app</h1>
-                <table>
-                    <th>NAME</th><th>E-mail Address</th>
-                    <tr><td>Jean-Bruno</td><td>jean.king@gmail.com</td></tr>
-                </table>
-                <span><input type={"text"} name={'txtname'}/></span>
+    switchPage=()=>{
+        let page = this.state.page;
+        if(page==="personnel"){
+            return (
+                <PersonnelPage
+                    Personnel={this.state.Personnel}
+                    listData={this.listData()}
+                />
+            )
+        }else if(page ==="vendor"){
+            return(
                 <div>
-                    <h1>List personnel</h1>
-                    <table border={1}>
-                        <tr>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>EMail</th>
-                            <th>Phone</th>
-                            <th>Date</th>
-                        </tr>
-                        {this.state.Personnel.map(record=>{
-                            return(
-                                <tr>
-                                    <td>{record.code}</td>
-                                    <td>{record.name}</td>
-                                    <td>{record.email}</td>
-                                    <td>{record.phone}</td>
-                                    <td>{record.date}</td>
-                                </tr>
-                            )
-                        })}
-                    </table>
+                    <Title title={"Vendor Page"} />
                 </div>
+            )
+        }
+    }
+    render() {
+        return (
+            <div>
+                <TopMenu setMenu={this.setMenu} />
+                {this.switchPage()}
             </div>
         )
+
+
     }
 
 }
