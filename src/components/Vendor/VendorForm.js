@@ -1,10 +1,9 @@
-
 import {PostToHPro} from "../../api/post";
 import React, {useState} from "react";
 import '../../assets/styles/entry-form.css'
 import Title from "../common/Title";
 
-export default ({reloadMe})=> {
+export default ({reloadMe}) => {
     const [inputs, setInputs] = useState({});
     const handleChange = (event) => {
         const name = event.target.name;
@@ -12,10 +11,11 @@ export default ({reloadMe})=> {
         setInputs(values => ({...values, [name]: value}))
     }
     const handleSubmit = (event) => {
-        let endpoint = "/common/entity/Personnel/insert";
+        let endpoint = "/common/entity/Vendor/insert";
         let strData = {"Data": inputs};
         let dataPost = JSON.stringify(strData);
-        PostToHPro(strData, endpoint, (outData)=>{
+  //      alert(dataPost);
+        PostToHPro(strData, endpoint, (outData) => {
             console.log("Returned>>>>", outData);
             reloadMe()
 
@@ -26,10 +26,9 @@ export default ({reloadMe})=> {
     }
     return (
 
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}>
             <div className={"App"}>
-                <Title title={"Capture Personnel"} />
-
+                <Title title={"Capture Vendor"}/>
                 <table>
                     <tr>
                         <td>Org Code</td>
@@ -41,18 +40,38 @@ export default ({reloadMe})=> {
                                    onChange={handleChange}/></td>
                     </tr>
                     <tr>
-                        <td>Role</td>
-                        <td><input type='text' name='Role' value={inputs.Role || ""}
+                        <td>Address</td>
+                        <td><input type='text' name='Address' value={inputs.Address || ""}
                                    onChange={handleChange}/></td>
                     </tr>
                     <tr>
-                        <td>Email address</td>
-                        <td><input type='text' name='Email' value={inputs.Email || ""}
+                        <td>Province</td>
+                        <td><input type='text' name='Province' value={inputs.Province || ""}
+                                   onChange={handleChange}/></td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td><input type='text' name='City' value={inputs.City || ""}
+                                   onChange={handleChange}/></td>
+                    </tr>
+                    <tr>
+                        <td>Suburb</td>
+                        <td><input type='text' name='Suburb' value={inputs.Suburb || ""}
+                                   onChange={handleChange}/></td>
+                    </tr>
+                    <tr>
+                        <td>PostalCode</td>
+                        <td><input type='text' name='PostalCode' value={inputs.PostalCode || ""}
                                    onChange={handleChange}/></td>
                     </tr>
                     <tr>
                         <td>Phone</td>
                         <td><input type='text' name='Phone' value={inputs.Phone || ""}
+                                   onChange={handleChange}/></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><input type='text' name='Email' value={inputs.Email || ""}
                                    onChange={handleChange}/></td>
                     </tr>
 

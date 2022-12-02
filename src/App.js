@@ -5,6 +5,7 @@ import EntryForm from "./components/Personnel/EntryForm";
 import EntryList from "./components/Personnel/EntryList";
 import Title from "./components/common/Title";
 import PersonnelPage from "./pages/PersonnelPage";
+import VendorPage from "./pages/VendorPage";
 import TopMenu from "./components/common/TopMenu";
 
 export default class App extends React.Component {
@@ -14,31 +15,38 @@ export default class App extends React.Component {
             Personnel: [],
             Countries: [],
             User: "",
-            page:"personnel"
+            page: "Personnel",
+            Vendor: [],
         }
+
     }
 
     componentDidMount = async () => {
-        await this.listData()
+        await this.listData("Personnel", "Personnel")
+        await this.listData("Vendor", "Vendor")
     }
-    listData = async () => {
+    listData = async (entity, statekey) => {
         let data = {};
-        let endpoint = "/common/entity/Personnel/list";
+        let endpoint = `/common/entity/${entity}/list`;
         await PostToHPro(data, endpoint, (dataOut) => {
-            console.log("--->>>", dataOut)
+            console.log(entity + "--->>>", dataOut)
             this.setState({
-                Personnel: dataOut.RESULT,
+                [statekey]: dataOut.RESULT,
             })
         })
     }
-    onDelete=async (record)=>{
+
+    onDelete = async (record) => {
         let data = {
-            Params:[
-                {key:"org",val:record.org,type:"string"},
-                {key:"code",val:record.code,type:"string"},
+            Params: [
+                {key: "org", val: record.org, type: "string"},
+                {key: "code", val: record.code, type: "string"},
             ]
         };
-        let endpoint = "/common/entity/Personnel/delete";
+        /* TO BE REVIEWED */
+        let entity = this.state.page
+        /* ------------------------ */
+        let endpoint = `/common/entity/${entity}/delete`;
         await PostToHPro(data, endpoint, async (dataOut) => {
             console.log("--->>>", dataOut)
             await this.listData()
@@ -46,31 +54,38 @@ export default class App extends React.Component {
         })
     }
 
-    setMenu=(menu)=>{
-        this.setState({page:menu})
+    setMenu = (menu) => {
+        this.setState({page: menu})
     }
 
-    switchPage=()=>{
+    switchPage = () => {
         let page = this.state.page;
-        if(page==="personnel"){
+        if (page === "Personnel") {
             return (
                 <PersonnelPage
                     Personnel={this.state.Personnel}
-                    listData={this.listData()}
+                    listData={this.listData}
+                    onDelete={this.onDelete}
                 />
             )
-        }else if(page ==="vendor"){
-            return(
+        } else if (page === "Vendor") {
+            return (
                 <div>
-                    <Title title={"Vendor Page"} />
+                    <Title title={"Vendor Page"}/>
+                    <VendorPage
+                        Vendor={this.state.Vendor}
+                        listData={this.listData}
+                        onDelete={this.onDelete}
+                    />
                 </div>
             )
         }
     }
+
     render() {
         return (
             <div>
-                <TopMenu setMenu={this.setMenu} />
+                <TopMenu setMenu={this.setMenu}/>
                 {this.switchPage()}
             </div>
         )

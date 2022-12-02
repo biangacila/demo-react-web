@@ -3,8 +3,8 @@ import '../../assets/styles/App.css'
 
 export default ({setMenu})=>{
     let arrayMenus=[
-        {key:"personnel",label:"Personnel"},
-        {key:"vendor",label:"Vendor"},
+        {key:"Personnel",label:"Personnel"},
+        {key:"Vendor",label:"Vendor"},
     ]
     return(
         <div>
@@ -12,8 +12,8 @@ export default ({setMenu})=>{
                 <tr>
                     {arrayMenus.map(row=>{
                         return(
-                            <th className={"menuTh"}>
-                                <a className={"onClickLink"} onClick={()=>setMenu(row.key)}>
+                            <th className={""}>
+                                <a className={"menuTh"} onClick={()=>setMenu(row.key)}>
                                     {row.label}
                                 </a>
                             </th>

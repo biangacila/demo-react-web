@@ -1,9 +1,17 @@
 
 .onClickLink{
     cursor: pointer;
-    color: red;
+    color: darkred;
 }
 
 .title{
     color:lightcoral;
+}
+.menuTh{
+    cursor: pointer;
+    font-size: 18px;
+    color: midnightblue;
+    width: 50px;
+    padding: 15px;
+    align: left;
 }

@@ -4,12 +4,13 @@ import EntryList from "../components/Personnel/EntryList";
 import React from "react";
 
 
-export default ({listData,Personnel})=>{
+export default ({listData,Personnel, onDelete})=>{
     return(
         <div>
             <Title title={"HPro Personnel"} />
             <EntryForm  reloadMe={listData}/>
-            <EntryList data={Personnel}/>
+            <EntryList data={Personnel} onDelete={onDelete}/>
+
         </div>
     )
 }
